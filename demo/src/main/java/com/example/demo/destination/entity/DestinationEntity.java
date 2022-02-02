@@ -9,7 +9,6 @@ import java.util.List;
 @Entity(name = "destinations")
 @Data
 public class DestinationEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,11 +32,8 @@ public class DestinationEntity {
         this.name = name;
     }
 
-
-
     public DestinationEntity() {
     }
-
     public Long getId() {
         return id;
     }

@@ -14,27 +14,18 @@ public class DestinationConverter {
         if (destinationDto.getId() != null) {
             destinationEntity.setId(destinationDto.getId());
         }
-
         destinationEntity.setName(destinationDto.getCity());
         destinationEntity.setDistance(destinationDto.getDistance());
-
-
         return destinationEntity;
     }
 
-
     public static DestinationDto fromDestinationEntity(DestinationEntity destinationEntity) {
         DestinationDto destinationDto = new DestinationDto();
-
         destinationDto.setId(destinationEntity.getId());
         destinationDto.setCity(destinationEntity.getName());
         destinationDto.setDistance(destinationEntity.getDistance());
-
-
         return destinationDto;
-
     }
-
     private static List<String> getOrdersAsStringList(DestinationEntity destinationEntity) {
         return destinationEntity.getOrders().stream()
                 .map(orderEntity -> orderEntity.getDestination().getName())

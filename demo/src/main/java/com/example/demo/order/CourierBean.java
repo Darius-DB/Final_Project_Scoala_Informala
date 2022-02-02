@@ -1,15 +1,14 @@
 package com.example.demo.order;
 
-import com.example.demo.OrderStatus;
 import com.example.demo.order.entity.OrderEntity;
 import com.example.demo.order.repository.OrderRepository;
-import org.hibernate.criterion.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class CourierBean {
@@ -23,41 +22,55 @@ public class CourierBean {
         this.orderRepository = orderRepository;
     }
 
-
     @Async
     public void courierStart(String destinationName, List<OrderEntity> orderEntities) {
 
         //log + timestamp + km
-        logger.info("Starting deliveries for " + destinationName + " on " + Thread.currentThread().getName() + " for " );
+        int numberOfDeliveringOrders = 0;
 
-        for (OrderEntity orderEntity : orderEntities) {
+        List<Long> idList = orderEntities
+                .stream()
+                .map(OrderEntity::getId)
+                .collect(Collectors.toList());
+
+        Iterable<OrderEntity> allById = orderRepository.findAllById(idList);
+
+        for (OrderEntity orderEntity : allById) {
             if (orderEntity.getStatusOrder() != OrderStatus.DELIVERED && orderEntity.getStatusOrder() != OrderStatus.CANCELED) {
                 orderEntity.setStatusOrder(OrderStatus.DELIVERING);
                 orderRepository.save(orderEntity);
+                numberOfDeliveringOrders++;
             }
         }
 
+        logger.info("Starting " + numberOfDeliveringOrders + " deliveries for " + destinationName + " on " + Thread.currentThread().getName() + " for " +
+                orderEntities.get(0).getDestination().getDistance() + " km");
 
-        for (OrderEntity orderEntity : orderEntities) {
-            //adjust profit
-            //set as delivered
 
-            try {
-                Thread.sleep(orderEntity.getDestination().getDistance() * 100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        int numberOfDeliveredOrders = 0;
 
-            if (orderEntity.getStatusOrder() == OrderStatus.DELIVERING) {
-                profit += orderEntity.getDestination().getDistance();
-                orderEntity.setStatusOrder(OrderStatus.DELIVERED);
-                orderRepository.save(orderEntity);
-            }
+        try {
+            Thread.sleep(orderEntities.get(0).getDestination().getDistance() * 500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
-//        System.out.println("Profit: " + profit);
+        //preluare din nou din DB
+        List<Long> idList2 = orderEntities
+                .stream()
+                .map(OrderEntity::getId)
+                .collect(Collectors.toList());
+        Iterable<OrderEntity> allById2 = orderRepository.findAllById(idList2);
 
-        logger.info("Finish delivery for " + destinationName);
+        for (OrderEntity newOrderEntity : allById2) {
+            if (newOrderEntity.getStatusOrder() == OrderStatus.DELIVERING) {
+                profit += newOrderEntity.getDestination().getDistance();
+                newOrderEntity.setStatusOrder(OrderStatus.DELIVERED);
+                orderRepository.save(newOrderEntity);
+                numberOfDeliveredOrders++;
+            }
+        }
+        logger.info(numberOfDeliveredOrders + " deliveries completed for " + destinationName);
 
     }
 

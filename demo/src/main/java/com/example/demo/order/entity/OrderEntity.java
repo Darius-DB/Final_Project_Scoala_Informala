@@ -1,10 +1,8 @@
 package com.example.demo.order.entity;
 
-import com.example.demo.OrderStatus;
+import com.example.demo.order.OrderStatus;
 import com.example.demo.destination.entity.DestinationEntity;
 import lombok.Data;
-import org.hibernate.annotations.Cascade;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.time.LocalDate;

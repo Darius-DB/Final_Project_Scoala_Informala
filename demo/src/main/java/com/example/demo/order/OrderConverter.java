@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.Optional;
 
 
 public class OrderConverter {
@@ -21,12 +22,10 @@ public class OrderConverter {
         if (orderDto.getId() != null) {
             orderEntity.setId(orderDto.getId());
         }
-
         orderEntity.setStatusOrder(orderDto.getStatus());
-        orderEntity.setDeliveryDate(transformDateToLong(orderDto.getDeliveryDate()));
-        orderEntity.setLastUpdated(transformDateToLong(orderDto.getLastUpdated()));
+        orderEntity.setDeliveryDate(transformDateToLong(orderDto.getDeliveryDate()).orElse(null));
+        orderEntity.setLastUpdated(transformDateToLong(orderDto.getLastUpdated()).orElse(null));
         orderEntity.setDestination(getDestinationEntityFromDto(orderDto));
-
         return orderEntity;
     }
 
@@ -34,11 +33,17 @@ public class OrderConverter {
         return new DestinationEntity(orderDto.getDestination());
     }
 
-    public static Long transformDateToLong(String dateCreated) throws ParseException {
+    public static Optional<Long> transformDateToLong(String dateCreated)  {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 
-        Date deliveryDate = sdf.parse(dateCreated);
-        return deliveryDate.getTime();
+        Date deliveryDate = null;
+        try {
+            deliveryDate = sdf.parse(dateCreated);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+        return Optional.of(deliveryDate.getTime());
     }
 
     public static OrderDto fromOrderEntity(OrderEntity orderEntity) {
@@ -53,12 +58,9 @@ public class OrderConverter {
         return orderDto;
 
     }
-
     private static String convertLongDateToString(Long deliveryDate) {
         LocalDate date =
                 Instant.ofEpochMilli(deliveryDate).atZone(ZoneId.systemDefault()).toLocalDate();
-
-//        LocalDate localDate = LocalDate.now();//For reference
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyy");
         return date.format(formatter);
     }

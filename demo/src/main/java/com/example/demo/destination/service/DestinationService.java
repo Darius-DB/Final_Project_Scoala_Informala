@@ -1,11 +1,10 @@
-package com.example.demo.service;
+package com.example.demo.destination.service;
 
-import com.example.demo.controller.DestinationInfoContributor;
+import com.example.demo.destination.controller.DestinationInfoContributor;
 import com.example.demo.destination.DestinationConverter;
 import com.example.demo.destination.DestinationDto;
 import com.example.demo.destination.entity.DestinationEntity;
 import com.example.demo.destination.repository.DestinationRepository;
-import com.example.demo.order.repository.OrderRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,12 +21,10 @@ import java.util.stream.StreamSupport;
 public class DestinationService {
 
     private final DestinationRepository destinationRepository;
-    private final OrderRepository orderRepository;
     private final DestinationInfoContributor destinationInfoContributor;
 
-    public DestinationService(DestinationRepository destinationRepository, OrderRepository orderRepository, DestinationInfoContributor destinationInfoContributor) {
+    public DestinationService(DestinationRepository destinationRepository, DestinationInfoContributor destinationInfoContributor) {
         this.destinationRepository = destinationRepository;
-        this.orderRepository = orderRepository;
         this.destinationInfoContributor = destinationInfoContributor;
     }
 

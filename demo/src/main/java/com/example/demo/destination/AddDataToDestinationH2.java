@@ -1,7 +1,9 @@
-package com.example.demo;
+package com.example.demo.destination;
 
 import com.example.demo.destination.entity.DestinationEntity;
 import com.example.demo.destination.repository.DestinationRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,30 +15,25 @@ import java.util.List;
 
 @Component
 public class AddDataToDestinationH2 {
-
-    private List<DestinationEntity> destinationEntityList = new ArrayList<>();
-
-
     private final DestinationRepository destinationRepository;
+    private final Logger logger= LoggerFactory.getLogger(AddDataToDestinationH2.class);
 
     @Autowired
     public AddDataToDestinationH2(DestinationRepository destinationRepository) {
-
         this.destinationRepository = destinationRepository;
     }
 
-
     public void addDestinations() {
+         List<DestinationEntity> destinationEntityList = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(
-                new FileReader("C:\\Users\\ALEX\\Desktop\\FinalProject (2)\\FinalProject\\FinalProject ()\\FinalProject\\demo\\src\\main\\resources\\destinations.csv"))) {
-            String line = null;
+                new FileReader("C:/Users/Bianca/Desktop/curs JAVA/ProiectFinal/FinalProject(9)/FinalProject/FinalProject/FinalProject ()/FinalProject/demo/src/main/resources/destinations.csv"))) {
+            String line;
             while ((line = br.readLine()) != null) {
                 try {
                     destinationEntityList.add(getDestinationFromCsvLine(line));
                     destinationRepository.saveAll(destinationEntityList);
-
                 } catch (IllegalArgumentException e) {
-                    System.err.println(e);
+                    logger.error(e.getMessage());
                 }
             }
         } catch (IOException e) {
@@ -45,22 +42,14 @@ public class AddDataToDestinationH2 {
     }
 
     protected DestinationEntity getDestinationFromCsvLine(String line) {
-
         String[] destinationAttributes = line.split(",");
 
         if (destinationAttributes.length != 2) {
             throw new IllegalArgumentException("Corrupted data");
         }
-
         Integer distance = Integer.parseInt(destinationAttributes[1].trim());
-
-
         return new DestinationEntity(destinationAttributes[0].trim(),
                 distance);
-
     }
 
-    public List<DestinationEntity> getDestinationEntityList() {
-        return destinationEntityList;
-    }
 }

@@ -1,7 +1,5 @@
 package com.example.demo.order;
 
-import com.example.demo.OrderStatus;
-import com.example.demo.destination.DestinationDto;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;

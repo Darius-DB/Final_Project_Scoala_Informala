@@ -1,24 +1,21 @@
-package com.example.demo.controller;
+package com.example.demo.destination.controller;
 
 import com.example.demo.destination.DestinationDto;
-import com.example.demo.destination.entity.DestinationEntity;
-import com.example.demo.service.DestinationService;
+import com.example.demo.destination.service.DestinationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
-//Not working
 @RestController
 @RequestMapping("/destinations")
 public class DestinationController {
-     private final DestinationService destinationService;
+    private final DestinationService destinationService;
 
     public DestinationController(DestinationService destinationService) {
         this.destinationService = destinationService;
     }
-
     @PostMapping("/add")
     public DestinationDto addDestination(@Valid @RequestBody DestinationDto payload) {
         return destinationService.addDestination(payload);
@@ -43,7 +40,6 @@ public class DestinationController {
     public void deleteDestinationById(@PathVariable("id") Long id) {
         destinationService.deleteDestination(id);
     }
-
 
 
 }
