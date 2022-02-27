@@ -28,7 +28,7 @@ public class AddDataToOrdersH2 {
     public void addOrders() {
         List<OrderEntity> orderEntityList = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(
-                new FileReader("C:/Users/Bianca/Desktop/curs JAVA/ProiectFinal/FinalProject(9)/FinalProject/FinalProject/FinalProject ()/FinalProject/demo/src/main/resources/orders.csv"))) {
+                new FileReader("C:\\Users\\ALEX\\Desktop\\Final_Project_Scoala_Informala\\demo\\src\\main\\resources\\orders.csv"))) {
             String line ;
             while ((line = br.readLine()) != null) {
                 try {

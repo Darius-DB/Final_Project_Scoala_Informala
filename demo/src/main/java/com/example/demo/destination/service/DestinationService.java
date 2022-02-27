@@ -45,8 +45,8 @@ public class DestinationService {
 
         if (destinationRepository.findById(payload.getId()).isPresent()) {
             DestinationEntity savedEntity = destinationRepository.save(DestinationConverter.fromDestinationDto(payload));
-            DestinationDto studentDto = DestinationConverter.fromDestinationEntity(savedEntity);
-            return new ResponseEntity<>(studentDto, HttpStatus.OK);
+            DestinationDto destinationDto = DestinationConverter.fromDestinationEntity(savedEntity);
+            return new ResponseEntity<>(destinationDto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

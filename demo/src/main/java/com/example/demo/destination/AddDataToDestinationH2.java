@@ -26,7 +26,7 @@ public class AddDataToDestinationH2 {
     public void addDestinations() {
          List<DestinationEntity> destinationEntityList = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(
-                new FileReader("C:/Users/Bianca/Desktop/curs JAVA/ProiectFinal/FinalProject(9)/FinalProject/FinalProject/FinalProject ()/FinalProject/demo/src/main/resources/destinations.csv"))) {
+                new FileReader("C:\\Users\\ALEX\\Desktop\\Final_Project_Scoala_Informala\\demo\\src\\main\\resources\\destinations.csv"))) {
             String line;
             while ((line = br.readLine()) != null) {
                 try {
